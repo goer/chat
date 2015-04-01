@@ -1,0 +1,15 @@
+doctype
+html(ng-app="chat")
+	head
+		title= "Real time web chat"
+		script(src='/socket.io/socket.io.js"')
+		script(src='/bower_components/angular/angular.js')
+		script(src='/js/app.js')
+	body
+		div(ng-controller='MainCtrl')			
+			div(ng-repeat='item in messages')
+				ul
+					li {{item.message}}
+			form(ng-submit='sendMessage()')
+				input(size='60', ng-model='message')
+				input(type='submit', value='Send')
