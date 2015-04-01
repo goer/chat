@@ -13,7 +13,7 @@ app.get("/", function(req, res){
 });
  
 app.use(express.static(__dirname + '/public'));
-var io = require('socket.io').listen(app.listen(port));
+var io = require('socket.io').listen(app.listen());
 
 io.sockets.on('connection', function (socket) {
     socket.emit('message', { message: 'welcome to the chat' });
