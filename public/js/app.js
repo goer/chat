@@ -3,7 +3,7 @@
 var app = angular.module('chat',[]);
 
 app.factory('socket', function($rootScope) { 
-	var socket = io.connect('chat-fonetix.rhcloud.com:8000');
+	var socket = io.connect('http://chat-fonetix.rhcloud.com:8000');
 	return {
 		on: function(eventName, callback) {
 			socket.on(eventName, function() {
