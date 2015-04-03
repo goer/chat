@@ -11,13 +11,14 @@ app.configure(function() {
 	app.set('views', __dirname + '/tpl');
 	app.set('view engine', "jade");
 	app.engine('jade', require('jade').__express);
-	app.get("/", function(req, res){
-	    res.render("page");
-	}); 
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(express.static(__dirname + '/public'));
 });
+
+app.get("/", function(req, res){
+    res.render("page");
+}); 
 
 server.listen(app.get('port'), app.get('ipaddr'), function(){
 	console.log('Express server listening on  IP: ' + app.get('ipaddr') + ' and port ' + app.get('port'));
@@ -26,9 +27,55 @@ server.listen(app.get('port'), app.get('ipaddr'), function(){
 io.set("log level", 1);
 
 io.sockets.on('connection', function (socket) {
+
     socket.emit('message', { message: 'welcome to the chat' });
+
+
+// CHAT
+    
     socket.on('send', function (data) {
     	console.log(data);
         io.sockets.emit('message', data);
     });
+
+
+// BIDDING    
+
+    var users = {};
+
+    var bid = {
+    	'name' : '',
+    	'price_min' : 0,
+    	'price_max' : 0,
+    	'latest_price' : 0,
+    	'latest_bidder' : '',
+    };
+
+	socket.on('client:login:request', function (data) {
+    	console.log('client:login:request >>'+' user:'+data.user+' password:'+data.password);
+    	users[data.user] = { 'user': data.user, 'password': data.password, 'status': 'OK' };
+		io.sockets.emit('client:login:response', users[data.user]);
+    });
+
+	socket.on('client:bid', function (data) {
+
+    	console.log('client:bid >>'+' user:'+data.user+' bid:'+data.price);
+
+		io.sockets.emit('client:bid', data);
+		if( data.price > bid.latest_price ){
+			bid.latest_price = data.price;
+			bid.latest_bidder = data.user;
+			io.sockets.emit('bid:update', bid);
+		}
+		
+    });
+
+	socket.on('owner:bid:update', function (data) {
+    	console.log('owner:item:update >>'+ data);
+    	bid=data;
+		io.sockets.emit('bid:update', bid);
+    });
+
+
+
 });

@@ -6,10 +6,24 @@ html(ng-app="chat")
 		script(src='/bower_components/angular/angular.js')
 		script(src='/js/app.js')
 	body
+		p
 		div(ng-controller='MainCtrl')			
+			h1 --- CHAT ---
 			div(ng-repeat='item in messages')
 				ul
 					li {{item.message}}
 			form(ng-submit='sendMessage()')
 				input(size='60', ng-model='message')
+				input(type='submit', value='Send')
+		p
+		div(ng-controller='BidCtrl')
+			h1 --- BID ---
+			h2 {{bid.latest_price}}
+			h3 by {{bid.latest_bidder}} 
+			form(ng-submit='sendBid()')
+				br
+				input(size='60', ng-model='user')
+				br 
+				input(size='60', ng-model='price')
+				br
 				input(type='submit', value='Send')
