@@ -77,5 +77,23 @@ io.sockets.on('connection', function (socket) {
     });
 
 
+// GPS
+
+    var location = {
+        lat : 0, lon : 0,
+        time : 0
+    }
+
+    var userLocation = {
+        '' : location
+    }
+
+    socket.on('user:location:update', function (data) {
+        console.log('user:location:update >>'+ data.user + " lat:" + data.location.lat + " lon:" + data.location.lon);
+        userLocation[data.user] = data.location;
+        io.sockets.emit('user:location:broadcast', data);
+    });
+
+
 
 });

@@ -70,3 +70,13 @@ app.controller('BidCtrl',function($scope,socket){
 
 });
 
+app.controller('GPSCtrl',function($scope,socket){
+
+
+	
+
+
+
+});
+
+
